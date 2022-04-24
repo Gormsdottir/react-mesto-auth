@@ -10,15 +10,15 @@ function Header({email, onSignOut}) {
     <header className="header">
       <img className="header__logo" src={logo} alt="логотип Место" />
       <Route path="/sign-up">
-        <Link className="authpage_link" to='/sign-in'>Войти</Link>
+        <Link className="header__link" to='/sign-in'>Регистрация</Link>
       </Route>
       <Route path="/sign-in">
-        <Link className="authpage_link" to='/sign-up'>Регистрация</Link>
+        <Link className="header__link" to='/sign-up'>Войти</Link>
       </Route>
       <Route exact path="/">
         <div className='header__info'>
           <p className="header__email"> {email} </p>
-          <Link className="authpage_link" to='/sign-in' onClick={handleSignOut}> Выйти </Link>
+          <Link className="header__link" to='/sign-in' onClick={onSignOut}> Выйти </Link>
         </div>
       </Route>
     </header>

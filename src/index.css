@@ -38,8 +38,6 @@
 
 @import url(./blocks/header/__email/header__email.css);
 
-@import url(./blocks/header/__logout/header__logout.css);
-
 @import url(./blocks/main/main.css);
 
 @import url(./blocks/main/__icon/main__icon.css);
