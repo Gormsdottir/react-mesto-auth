@@ -1,29 +1,78 @@
-import React from 'react';
-import logo from '../images/logo.svg';
-import { Route, Link } from 'react-router-dom';
-import { CurrentUserContext } from '../context/CurrentUserContext';
+import { useState } from "react";
+import logo from "../images/logo.svg";
 
-function Header({ onSignOut }) {
+import { NavLink, useLocation } from 'react-router-dom';
 
-	const {email} = React.useContext(CurrentUserContext);
+function Header({ loggedIn, email, onSignOut }) {
 
-	return (
-		<header className="header">
-			<img className="header__logo" src={logo} alt="логотип Место" />
-			<Route path="/sign-up">
-				<Link className="register__link" to="/sign-in">Войти</Link>
-			</Route>
-			<Route path="/sign-in">
-				<Link className="register__link" to='/sign-up'>Регистрация</Link>
-			</Route>
-			<Route exact path="/">
-				<div className="header__menu">
-					<p className="header__info">{email}</p>
-						<Link className="register__link" to='/sign-in' onClick={onSignOut}>Выйти</Link>
-				</div>
-			</Route>
-		</header>
-	);
+  const location = useLocation();
+  const [navBarIsOpen, setNavBarIsOpen] = useState(false);
+
+
+  function handleToggleMenu() {
+    setNavBarIsOpen(!navBarIsOpen);
+  }
+
+  function handleSignOut() {
+    setNavBarIsOpen(false);
+    onSignOut();
+  }
+
+  return (
+    <header className='header'>
+      {loggedIn &&
+        (
+          <div
+            className={navBarIsOpen ? 'header__email-container header__email-container_opened' : 'header__email-container'}
+          >
+            <address
+              className="header__email"
+            >
+              {email && email}
+            </address>
+            <button
+              className="header__logout"
+              type="button"
+              onClick={handleSignOut}
+            >
+              Выйти
+            </button>
+          </div>
+        )
+      }
+      <img className="header__logo" src={logo} alt="логотип Место" />
+      <div
+        className="header__container"
+      >
+        {!loggedIn &&
+          (<nav>
+            {location.pathname === '/sign-in' &&
+              (
+                <NavLink
+                  className="header__link"
+                  to="/sign-up"
+                >
+                  Войти
+                </NavLink>
+              )
+            }
+            {location.pathname === '/sign-up' &&
+              (
+                <NavLink
+                  className="header__link"
+                  to="/sign-in"
+                >
+                  Регистрация
+                </NavLink>
+              )
+            }
+          </nav>
+          )
+        }
+      </div>
+
+    </header>
+  )
 }
 
 export default Header;

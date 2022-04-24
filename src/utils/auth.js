@@ -1,49 +1,46 @@
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = "https://auth.nomoreparties.co"
 
-const checkResponse = async (response) => {
-    const data = await response.json();
-    if (response.ok) {
-        return data;
+const checkResponse = (res) => {
+    if (res.ok) {
+      return res.json();
     }
-    const { statusCode } = data;
-    const { message } = data.message[0].messages[0]
-    const error = new Error(message || 'Ошибка');
-    error.status = statusCode;
-    throw error
-}
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
 
-export const registration = (email, password) => {
-    return fetch(`${BASE_URL}/sign-up`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
+  export const register = (password, email) => {
+    return fetch(`${BASE_URL}/signup`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({password, email})
     })
-        .then(checkResponse)
-};
+    .then(checkResponse)
+  }
 
-export const authorization = (email, password) => {
-    return fetch(`${BASE_URL}/sign-in`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
+  export const login =  (password, email) => {
+    return fetch(`${BASE_URL}/signin`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({password, email})
     })
-        .then(checkResponse)
-};
-
-export const getUser = (token) => {
+    .then(checkResponse)
+    .then((data) => {
+      if (data.token) {
+        localStorage.setItem('jwt', data.token)
+        return data.token
+      }
+    })
+  }
+  export const getContent = token => {
     return fetch(`${BASE_URL}/users/me`, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        }
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization" : `Bearer ${token}`
+      }
     })
-        .then(checkResponse)
+    .then(checkResponse)
 }

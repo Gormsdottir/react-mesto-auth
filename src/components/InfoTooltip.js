@@ -1,31 +1,29 @@
+function InfoTooltip({ isOpen, onClose, title, imgPath }) {
 
-function InfoToolTip({ name, isOpen, onClose, toolTipMessage }) {
+    function handleClickOverlay(e) {
+        e.stopPropagation();
+      }
 
-
-    return (
-        <div
-            className={isOpen
-                ? `popup popup_type_${name} popup_opened`
-                : `popup popup_type_${name}`}
-        >
-            <div className="popup__container">
-                <img className="popup__tooltip-img"
-                    alt={toolTipMessage.message}
-                    src={toolTipMessage.img}
-                ></img>
-                <button
-                    className="button button_type_close"
-                    type="button"
-                    onClick={onClose}
-                ></button>
-                <h2
-                    className="popup__title"
-                >
-                    {toolTipMessage.message}
-                </h2>
-            </div>
-        </div>
-    );
+  return (
+    <div className={`popup popup_type_tooltip ${isOpen ? "popup_opened" : ""}`} onClick={onClose}>
+      <div 
+      className="popup__container popup__container_type_tooltip" 
+      onClick={handleClickOverlay}
+      >
+        <img 
+        src={imgPath} 
+        alt={imgPath} 
+        className="popup__tooltip-img" />
+        <h2 className="popup__title popup__title_type_tooltip">{title}</h2>
+      <button
+          type="button"
+          className="button button_type_close"
+          aria-label="Закрыть картинку"
+          onClick={onClose}
+        ></button>
+    </div>
+    </div>
+  );
 }
 
-export default InfoToolTip;
+export default InfoTooltip

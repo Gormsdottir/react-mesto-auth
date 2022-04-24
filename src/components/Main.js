@@ -1,4 +1,4 @@
-import React from 'react';
+import {useContext} from 'react';
 import Card from '../components/Card.js';
 import { CurrentUserContext } from '../context/CurrentUserContext.js';
 import Footer from './Footer.js';
@@ -13,7 +13,7 @@ function Main({
 	onCardDelete,
 	cards }) {
 
-	const currentUser = React.useContext(CurrentUserContext);
+	const currentUser = useContext(CurrentUserContext);
 
 	return (
 		<main className="main">

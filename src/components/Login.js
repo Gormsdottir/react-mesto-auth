@@ -1,57 +1,51 @@
-import { useState } from 'react';
+import { useState } from "react";
+import AuthPage from "./AuthPage";
 
-
-function Login({onSubmit}) {
-
-    const [password, setPassword] = useState('');
+function Login({ onSubmit }) {
     const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    function handleChangeEmail(evt) {
-        setEmail(evt.target.value);
+    function handleChange(e) {
+        const { value } = e.target
+        e.target.name === 'Email' ? setEmail(value) : setPassword(value)
     }
 
-    function handleChangePassword(evt) {
-        setPassword(evt.target.value);
-    }
-
-    function handleSubmitLogin(evt) {
-        evt.preventDefault();
-        onSubmit({ email, password });
+    function handleSubmit(e) {
+        e.preventDefault()
+        onSubmit(password, email)
     }
 
     return (
-        <section className="login">
-            <h1 className="login__title">Вход</h1>
-            <form className="login__form" onSubmit={handleSubmitLogin}>
-                <input
-                    name='email'
-                    id='email'
-                    type='email'
-                    placeholder='Email'
-                    className="login__input login__input_type_email"
-                    required
-                    onChange={handleChangeEmail}
-                    value={email}
-                />
-                <input
-                    name='password'
-                    id='password'
-                    type='password'
-                    placeholder='Пароль'
-                    className='login__input login__input_type_password'
-                    required
-                    onChange={handleChangePassword}
-                    value={password}
-                />
-            </form>
-            <button
-                className="button button_type_login"
-                type="submit"
+        <div className='authpage authpage_tupe_login'>
+            <AuthPage
+                name='login'
+                onSubmit={handleSubmit}
+                title='Вход'
+                button='Войти'
             >
-                Войти
-            </button>
-        </section>
-    );
+                <input
+                    name="Email"
+                    type="email"
+                    className="authpage__input"
+                    id="email"
+                    placeholder="Email"
+                    value={email || ''}
+                    onChange={handleChange}
+                />
+
+                <input
+                    name="Password"
+                    type="password"
+                    className="authpage__input"
+                    id="password"
+                    placeholder="Пароль"
+                    value={password || ''}
+                    onChange={handleChange}
+                />
+
+            </AuthPage>
+        </div>
+    )
 }
 
-export default Login;
+export default Login

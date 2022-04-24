@@ -1,61 +1,50 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import AuthPage from "./AuthPage";
+import { useState } from "react";
 
-function Register({onSubmit}) {
+function Register({ onSubmit }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const [password, setPassword] = React.useState('');
-    const [email, setEmail] = React.useState('');
+  function handleChange(evt) {
+    const { value } = evt.target;
+    evt.target.name === "Email" ? setEmail(value) : setPassword(value);
+  }
 
-    function handleChangeEmail(evt) {
-        setEmail(evt.target.value);
-    }
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    onSubmit(password, email);
+  }
 
-    function handleChangePassword(evt) {
-        setPassword(evt.target.value);
-    }
+  return (
+    <div className="authpage authpage_type_register">
+      <AuthPage
+        name="register"
+        onSubmit={handleSubmit}
+        title="Регистрация"
+        button="Зарегистрироваться"
+      >
+        <input
+          name="Email"
+          type="email"
+          className="authpage__input"
+          id="email"
+          placeholder="Email"
+          value={email || ""}
+          onChange={handleChange}
+        />
 
-    function handleSubmitRegister(evt) {
-        evt.preventDefault();
-        onSubmit({ email, password });
-    }
-
-    return (
-        <section className='register'>
-            <h1 className='register__title'>Регистрация</h1>
-            <form className='register__form' onSubmit={handleSubmitRegister}>
-                <input
-                    name='email'
-                    id='email'
-                    type='email'
-                    placeholder='Email'
-                    className='register__input register__input_type_email'
-                    required
-                    onChange={handleChangeEmail}
-                    value={email}
-                />
-                <input
-                    name='password'
-                    id='password'
-                    type='password'
-                    placeholder='Пароль'
-                    className='register__input register__input_type_password'
-                    required
-                    onChange={handleChangePassword}
-                    value={password}
-                    minLength='8'
-                    maxLength='16'
-                />
-            </form>
-            <button type='submit' className='button button_type_register'>
-                Зарегистрироваться
-            </button>
-            <Link to='/sign-in' className='register__link register__link_type_singin'>
-                Уже зарегистрированы? Войти
-            </Link>
-        </section>
-    )
+        <input
+          name="Password"
+          type="password"
+          className="authpage__input"
+          id="password"
+          placeholder="Пароль"
+          value={password || ""}
+          onChange={handleChange}
+        />
+      </AuthPage>
+    </div>
+  );
 }
 
-
-
-export default Register;
+export default Register
