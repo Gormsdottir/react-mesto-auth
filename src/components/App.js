@@ -188,6 +188,7 @@ function App() {
   function onSignOut() {
     localStorage.removeItem("jwt");
     setLoggedIn(false);
+ ​   history​.​push​(​'/sign-in'​);
   }
 
   return (
@@ -196,7 +197,6 @@ function App() {
         <div className="root">
           <CurrentUserContext.Provider value={currentUser}>
             <Header
-              loggedIn={loggedIn}
               email={email}
               onSignOut={onSignOut}
             />
