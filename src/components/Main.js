@@ -4,66 +4,59 @@ import { CurrentUserContext } from '../context/CurrentUserContext.js';
 import Footer from './Footer.js';
 
 
-function Main({
-	onEditAvatar,
-	onEditProfile,
-	onAddPlace,
-	onCardClick,
-	onCardLike,
-	onCardDelete,
-	cards }) {
+function Main({ cards, onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike,onCardDelete }) {
 
-	const currentUser = useContext(CurrentUserContext);
+    const currentUser = useContext(CurrentUserContext);
 
-	return (
-		<main className="main">
-			<section className="profile">
-				<button
-					className="profile__button-avatar"
-					type="button"
-					onClick={onEditAvatar}
-				>
-					<img
-						className="profile__avatar"
-						name="avatar"
-						alt="Ваше фото профиля"
-						src={currentUser.avatar}
-					/>
-				</button>
-				<div className="profile__container">
-					<div className="profile__info">
-						<div className="profile__description">
-							<h1 className="profile__title">{currentUser.name}</h1>
-							<button
-								className="profile__button-edit"
-								type="button"
-								onClick={onEditProfile}>
-							</button>
-						</div>
-						<p className="profile__subtitle">{currentUser.about}</p>
-					</div>
-				</div>
-				<button
-					className="profile__button-add"
-					type="button"
-					onClick={onAddPlace}>
-				</button>
-			</section>
+    return (
+        <main className="main">
+            <section className="profile">
+                <div className="profile__avatar">
+                    <div
+                        className="profile__image"
+                        alt="аватар профиля"
+                        style={{ backgroundImage: `url(${currentUser.avatar})` }}
+                    />
+                    <button
+                        type="button"
+                        className="button_type_edit-avatar button"
+                        onClick={onEditAvatar}
+                    />
+                </div>
+                <h1 className="profile__name">{currentUser.name}</h1>
+                <p className="profile__occupation">{currentUser.about}</p>
+                <button
+                    type="button"
+                    className="button_type_edit-profile button"
+                    aria-label="Изменить"
+                    onClick={onEditProfile}
+                />
+                <button
+                    type="button"
+                    className="button_type_add-card button"
+                    aria-label="Добавить"
+                    onClick={onAddPlace}
+                />
+            </section>
+            <section className="cards">
+                <ul className="cards__grid">
+                    {cards.map((card) => {
 
-			<section className="elements">
-				{cards.map((card) => (
-					<Card
-						key={card._id}
-						card={card}
-						onCardClick={onCardClick}
-						onCardLike={onCardLike}
-						onCardDelete={onCardDelete}
-					/>
-				))}
-			</section>
-			<Footer />
-		</main>
-	);
-}
+                        return (
+                            <Card
+                                key={card._id}
+                                card={card}
+                                onCardClick={onCardClick}
+                                onCardLike={onCardLike}
+                                onCardDelete={onCardDelete}
+                            />
+                        )
+                    })}
+                </ul>
+            </section>
+			<Footer/>
+        </main>
+    )
+};
 
-export default Main;
+export default Main

@@ -93,25 +93,26 @@ function App() {
   function handleUpdateUser(userInfo) {
     api.setUserInfoApi(userInfo).then((userInfo) => {
       setCurrentUser(userInfo);
+      closeAllPopups();
     })
       .catch((err) => console.log(err));
-    closeAllPopups();
   }
   //обновление аватара
   function handleUpdateAvatar(userInfo) {
     api.handleUserAvatar(userInfo).then((userInfo) => {
       setCurrentUser(userInfo);
+      closeAllPopups();
     })
       .catch((err) => console.log(err));
-    closeAllPopups();
   }
   //добавление новой карточки
   function handleAddPlaceSubmit(newCard) {
     api.addUserCard(newCard).then((newCard) => {
       setCards([newCard, ...cards]);
+      closeAllPopups();
     })
       .catch((err) => console.log(err));
-    closeAllPopups();
+    
   }
   //лайк карточки
   function handleCardLike(card) {
@@ -191,76 +192,75 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <div className="page">
-        <div className="root">
-          <CurrentUserContext.Provider value={currentUser}>
-            <Header
-              email={email}
-              onSignOut={onSignOut}
+    <div className="page">
+      <div className="root">
+        <CurrentUserContext.Provider value={currentUser}>
+          <Header
+            loggedIn={loggedIn}
+            email={email}
+            onSignOut={onSignOut}
+          />
+
+          <Switch>
+            <ProtectedRoute
+              exact
+              path="/"
+              loggedIn={loggedIn}
+              component={Main}
+              cards={cards}
+              onEditAvatar={handleEditAvatarClick}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
             />
 
-            <Switch>
-              <ProtectedRoute 
-                exact 
-                path="/"
-                loggedIn={loggedIn}
-                component={Main}
-                cards={cards}
-                onEditAvatar={handleEditAvatarClick}
-                onEditProfile={handleEditProfileClick}
-                onAddPlace={handleAddPlaceClick}
-                onCardClick={handleCardClick}
-                onCardLike={handleCardLike}
-                onCardDelete={handleCardDelete}
+            <Route path="/sign-in">
+              <Register
+                onSubmit={handleRegistration}
+                isInfoTooltipOpen={isInfoTooltipOpen}
               />
+            </Route>
+            <Route path="/sign-up">
+              <Login
+                onSubmit={handleLogin} />
+            </Route>
+          </Switch>
 
-              <Route path="/sign-in">
-                <Register
-                  onSubmit={handleRegistration}
-                  isInfoTooltipOpen={isInfoTooltipOpen}
-                />
-              </Route>
-              <Route path="/sign-up">
-                <Login
-                  onSubmit={handleLogin} />
-              </Route>
-            </Switch>
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
+          />
 
-            <EditAvatarPopup
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups}
-              onUpdateAvatar={handleUpdateAvatar}
-            />
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}
+          />
 
-            <EditProfilePopup
-              isOpen={isEditProfilePopupOpen}
-              onClose={closeAllPopups}
-              onUpdateUser={handleUpdateUser}
-            />
+          <AddCardPopup
+            isOpen={isAddPlacePopupOpen}
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlaceSubmit}
+          />
 
-            <AddCardPopup
-              isOpen={isAddPlacePopupOpen}
-              onClose={closeAllPopups}
-              onAddPlace={handleAddPlaceSubmit}
-            />
+          <ImagePopup
+            card={selectedCard}
+            onClose={closeAllPopups}
+          />
 
-            <ImagePopup
-              card={selectedCard}
-              onClose={closeAllPopups}
-            />
-
-            <InfoTooltip
-              name="tooltip"
-              isOpen={isInfoTooltipOpen}
-              onClose={closeAllPopups}
-              title={message.text}
-              imgPath={message.imgPath}
-            />
-          </CurrentUserContext.Provider>
-        </div>
+          <InfoTooltip
+            name="tooltip"
+            isOpen={isInfoTooltipOpen}
+            onClose={closeAllPopups}
+            title={message.text}
+            imgPath={message.imgPath}
+          />
+        </CurrentUserContext.Provider>
       </div>
-    </BrowserRouter>
+    </div>
   )
 }
 
